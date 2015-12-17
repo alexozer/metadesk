@@ -1,0 +1,10 @@
+#
+# metadesk bindings
+# for bspwm-specific bindings, see https://github.com/baskerville/bspwm/blob/master/examples/sxhkdrc
+#
+
+alt + {n,i}
+	mdc focused -p -{n,N}
+
+alt + {1-9,0}
+	mdc root -c {0-8,9} -f

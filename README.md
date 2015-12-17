@@ -72,7 +72,7 @@ You could use attributes to:
 
 ## Examples
 
-A complete metadesk setup, including [bspwm][], [sxhkd][], and [lemonbar][] configurations, is available in the [examples](/examples) directory.
+A sample metadesk configuration which uses [sxhkd][] and [lemonbar][] is available in the [examples](/examples) directory.
 
 #### Example `mdc` usage
 Focus the second child of the root desktop:

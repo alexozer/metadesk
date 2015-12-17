@@ -1,0 +1,6 @@
+#!/bin/bash
+
+bspc config top_padding			30
+bspc monitor -d root
+
+metadesk -c "$HOME/.config/bspwm/metadesk.sh" &
