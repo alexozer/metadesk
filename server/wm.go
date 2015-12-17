@@ -47,6 +47,10 @@ func (this *Bspwm) IsDesktopOccupied(id string) bool {
 	return len(this.exec("query", "--desktop", id, "--windows")) > 0
 }
 
+func (this *Bspwm) ClaimFocusedWindow(id string) {
+	this.exec("window", "focused", "-d", id)
+}
+
 func (this *Bspwm) exec(args ...string) []byte {
 	output, _ := exec.Command("bspc", args...).Output()
 

@@ -189,6 +189,41 @@ func (this *Cmdline) parseAndRunCommand(d *Desktop) error {
 
 		d.UnsetAttr(this.next())
 
+	case "-w", "--move-window":
+		if d.IsOccupied() {
+			d.ClaimFocusedWindow()
+		} else {
+			err = errors.New("No focused window")
+		}
+
+	case "-s", "--swap":
+		if d.Parent() == nil {
+			err = errors.New("Cannot swap root desktop")
+			break
+		}
+
+		if !this.hasArgs() {
+			err = errors.New("No sibling provided")
+			break
+		}
+
+		switch sibStr := this.next(); sibStr {
+		case "next":
+			d.SwapNext()
+		case "prev":
+			d.SwapPrev()
+		default:
+			if index, sibErr := strconv.Atoi(sibStr); sibErr == nil {
+				if d.Parent().IsValidIndex(index) {
+					d.SwapWith(index)
+				} else {
+					err = errors.New("Invalid sibling index")
+				}
+			} else {
+				err = errors.New("Invalid sibling selector")
+			}
+		}
+
 	case "-F", "--focused-child":
 		msg = fmt.Sprintf("%d", d.FocusedChild())
 

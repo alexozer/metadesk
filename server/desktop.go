@@ -60,6 +60,9 @@ func (this *Desktop) AddChild() {
 	d := this.newDesktop()
 	if len(this.children) == 0 {
 		d.id = this.id
+		if this.focused == this {
+			this.focused = d
+		}
 	} else {
 		d.id = this.wm.AddDesktop()
 	}
@@ -73,11 +76,12 @@ func (this *Desktop) AddChild() {
 func (this *Desktop) Remove() {
 	parent := this.parent
 
-	left := parent.children[0:this.parentIndex]
+	left := parent.children[:this.parentIndex]
 	right := parent.children[this.parentIndex+1:]
 	parent.children = append(left, right...)
 	if len(parent.children) == 0 {
 		parent.id = this.id
+		this.focused, this.lastFocused = parent, parent
 		return
 	}
 	this.wm.RemoveDesktop(this.id)
@@ -88,10 +92,18 @@ func (this *Desktop) Remove() {
 
 	if parent.focusedChild > this.parentIndex {
 		parent.focusedChild--
-	} else if this.focusedChild == this.parentIndex {
-		if this.isLeafFocused() {
-			this.parent.focus()
+	} else if parent.focusedChild == this.parentIndex {
+		if parent.focusedChild >= len(parent.children) {
+			parent.focusedChild--
 		}
+	}
+
+	if this.isLeafFocused() {
+		parent.focus()
+	}
+
+	if this.lastFocused == this {
+		this.lastFocused = this.focused
 	}
 }
 
@@ -143,6 +155,41 @@ func (this *Desktop) Focused() *Desktop {
 
 func (this *Desktop) LastFocused() *Desktop {
 	return this.lastFocused
+}
+
+func (this *Desktop) ClaimFocusedWindow() {
+	this.wm.ClaimFocusedWindow(this.id)
+}
+
+func (this *Desktop) SwapNext() {
+	index := this.parentIndex + 1
+	if this.parent.IsValidIndex(index) {
+		this.SwapWith(index)
+	}
+}
+
+func (this *Desktop) SwapPrev() {
+	index := this.parentIndex - 1
+	if this.parent.IsValidIndex(index) {
+		this.SwapWith(index)
+	}
+}
+
+// Assumes: this.IsValidIndex(index) && this.parent != nil
+func (this *Desktop) SwapWith(index int) {
+	parent := this.parent
+
+	// fix the parent's focused pointer
+	if parent.focusedChild == this.parentIndex {
+		parent.focusedChild = index
+	} else if this.parentIndex == index {
+		parent.focusedChild = this.parentIndex
+	}
+
+	// swap the parent's children
+	swapee := parent.children[index]
+	parent.children[this.parentIndex], parent.children[index] = swapee, this
+	this.parentIndex, swapee.parentIndex = swapee.parentIndex, this.parentIndex
 }
 
 func (this *Desktop) focusIndices() {
