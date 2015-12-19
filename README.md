@@ -55,7 +55,7 @@ Command | Description
 `-w | --move-window` | Move the focused window to the selected desktop
 `-s | --swap <sibling>` | Swap the selected desktop with a sibling desktop. `<sibling>` is either `next`, `prev`, or an integer index
 `-F | --focused-child` | Print the index of the focused child
-`-C | --child-count` | Print the number of cihld desktops
+`-C | --child-count` | Print the number of child desktops
 `-P | --print <formatter>` | Use the given formatter to print the desktop's state
 `-S | --subscribe <formatter>` | Subscribe to the desktop's state printed by the given formatter
 
