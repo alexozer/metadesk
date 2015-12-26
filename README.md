@@ -11,25 +11,24 @@ Metadesk is a [bspwm][] wrapper that organizes your desktops into a tree. This i
 ## Installation
 
 You'll first need to set up [go](https://golang.org/doc/install#install) and [bspwm][]. Then run:
-```bash
-$ go get github.com/alexozer/metadesk/...
-```
+
+	$ go get github.com/alexozer/metadesk/...
 
 ## Usage
 
 Similar to [bspwm][], metadesk uses a client-server model to control its state. A metadesk daemon, started with the `metadesk` command, is controlled using the `mdc` command. To control metadesk using hotkeys, you use a hotkey daemon like [sxhkd][] to call `mdc`.
 
 #### General `mdc` syntax
-```
-mdc DESKTOP_SEL COMMAND
-```
+
+	mdc DESKTOP_SEL COMMAND
+
 `mdc` applies the given command to the given selected desktop.
 
 #### Selecting a desktop
 A DESKTOP_SEL consists of an initial desktop selection and any number of subselectors:
-```
-<initial_sel> [SUBSELECTOR]*
-```
+
+	<initial_sel> [SUBSELECTOR]*
+
 `<inital_sel>` can be any of:
 - `root` the root desktop
 - `focused` the currently focused leaf desktop
@@ -76,29 +75,24 @@ A sample metadesk configuration which uses [sxhkd][] and [lemonbar][] is availab
 
 #### Example `mdc` usage
 Focus the second child of the root desktop:
-```bash
-mdc root -c 1 -f
-```
+
+	mdc root -c 1 -f
 
 Select the desktop next to the focused desktop:
-```bash
-mdc focused -p -n
-```
+
+	mdc focused -p -n
 
 Set the "cwd" attribute of the third child of the root desktop:
-```bash
-mdc root -c 2 -A cwd "$HOME/code"
-```
+
+	mdc root -c 2 -A cwd "$HOME/code"
 
 Remove the last focused desktop:
-```bash
-mdc last -r
-```
+
+	mdc last -r
 
 Continuously pipe the root desktop's state to lemonbar:
-```bash
-mdc root -S lemonbar | lemonbar
-```
+
+	mdc root -S lemonbar | lemonbar
 
 ## Contributing
 
